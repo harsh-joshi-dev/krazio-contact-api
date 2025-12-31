@@ -247,34 +247,10 @@ def send_email_via_sendgrid(to_email, subject, html_content, text_content):
         if response.status_code in [200, 202]:
             return True, "Email sent successfully via SendGrid"
         else:
-            # Get more detailed error message
-            error_body = ""
-            try:
-                error_body = response.body.decode('utf-8')
-            except:
-                try:
-                    error_body = str(response.body)
-                except:
-                    pass
-            
-            error_msg = f"SendGrid returned status code: {response.status_code}"
-            if error_body:
-                error_msg += f" - {error_body}"
-            
-            # Common error explanations
-            if response.status_code == 403:
-                error_msg += " (Forbidden - Check: 1) Sender email is verified in SendGrid 2) API key has 'Mail Send' permissions 3) Sender email matches exactly)"
-            elif response.status_code == 401:
-                error_msg += " (Unauthorized - Check your SendGrid API key)"
-            
-            return False, error_msg
+            return False, f"SendGrid returned status code: {response.status_code}"
     
     except Exception as e:
-        error_msg = f"SendGrid error: {str(e)}"
-        # Add helpful context for common errors
-        if "403" in str(e) or "Forbidden" in str(e):
-            error_msg += " - Troubleshooting: 1) Verify sender email in SendGrid Settings > Sender Authentication 2) Check API key has 'Mail Send' permissions 3) Ensure FROM_EMAIL matches verified sender exactly"
-        return False, error_msg
+        return False, f"SendGrid error: {str(e)}"
 
 
 def send_email_via_smtp(to_email, subject, html_content, text_content, priority='normal'):
@@ -526,9 +502,5 @@ if __name__ == '__main__':
     port = int(os.getenv('PORT', 5001))
     # Only enable debug mode in development
     debug = os.getenv('FLASK_ENV') == 'development'
-    # Suppress multiprocessing resource tracker warnings in debug mode
-    import warnings
-    if debug:
-        warnings.filterwarnings('ignore', category=UserWarning, module='multiprocessing.resource_tracker')
-    app.run(debug=debug, host='0.0.0.0', port=port, use_reloader=debug)
+    app.run(debug=debug, host='0.0.0.0', port=port)
 
