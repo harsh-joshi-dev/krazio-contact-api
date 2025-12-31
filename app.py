@@ -7,8 +7,11 @@ import os
 from dotenv import load_dotenv
 import re
 
-# Load environment variables
-load_dotenv()
+# Load environment variables (silently fail if .env doesn't exist)
+try:
+    load_dotenv()
+except Exception:
+    pass  # .env file is optional, environment variables can be set directly
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
