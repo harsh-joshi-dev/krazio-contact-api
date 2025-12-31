@@ -11,8 +11,8 @@ backlog = 2048
 workers = 1
 worker_class = 'sync'
 worker_connections = 1000
-timeout = 120  # Increased timeout for slow startups
-graceful_timeout = 30
+timeout = 300  # Increased timeout for slow startups (5 minutes)
+graceful_timeout = 120
 keepalive = 5
 preload_app = False  # Don't preload to avoid startup issues
 

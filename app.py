@@ -13,8 +13,14 @@ try:
 except Exception:
     pass  # .env file is optional, environment variables can be set directly
 
+# Initialize Flask app
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
+
+# Log startup (this helps debug)
+import sys
+print("Flask app initialized", file=sys.stderr)
+sys.stderr.flush()
 
 # Email configuration from environment variables
 SMTP_SERVER = os.getenv('SMTP_SERVER', 'smtp.gmail.com')
@@ -341,11 +347,17 @@ def index():
 
 @app.route('/health', methods=['GET'])
 def health_check():
-    """Health check endpoint"""
+    """Health check endpoint - must respond quickly"""
     return jsonify({
         'status': 'healthy',
         'message': 'Contact API is running'
     }), 200
+
+
+@app.route('/ping', methods=['GET'])
+def ping():
+    """Simple ping endpoint for health checks"""
+    return jsonify({'pong': True}), 200
 
 
 @app.route('/contact', methods=['POST'])
