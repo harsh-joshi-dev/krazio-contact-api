@@ -441,15 +441,15 @@ def contact():
         }), 500
 
 
+# Validate configuration (only print warnings, don't block startup)
+if not SMTP_USERNAME or not SMTP_PASSWORD:
+    print("WARNING: SMTP_USERNAME and SMTP_PASSWORD are not set in environment variables.")
+    print("Please set them in .env file or as environment variables.")
+
+if not TO_EMAIL:
+    print("WARNING: TO_EMAIL is not set. Contact form emails will not be sent anywhere.")
+
 if __name__ == '__main__':
-    # Validate configuration
-    if not SMTP_USERNAME or not SMTP_PASSWORD:
-        print("WARNING: SMTP_USERNAME and SMTP_PASSWORD are not set in environment variables.")
-        print("Please set them in .env file or as environment variables.")
-    
-    if not TO_EMAIL:
-        print("WARNING: TO_EMAIL is not set. Contact form emails will not be sent anywhere.")
-    
     # Get port from environment variable (Render provides PORT, default to 5001 for local)
     port = int(os.getenv('PORT', 5001))
     # Only enable debug mode in development

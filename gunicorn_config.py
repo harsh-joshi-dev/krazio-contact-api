@@ -7,11 +7,14 @@ bind = f"0.0.0.0:{os.getenv('PORT', '5000')}"
 backlog = 2048
 
 # Worker processes
-workers = multiprocessing.cpu_count() * 2 + 1
+# Use 1 worker for free tier, 2 for paid tier
+workers = 1
 worker_class = 'sync'
 worker_connections = 1000
-timeout = 30
-keepalive = 2
+timeout = 120  # Increased timeout for slow startups
+graceful_timeout = 30
+keepalive = 5
+preload_app = False  # Don't preload to avoid startup issues
 
 # Logging
 accesslog = '-'
